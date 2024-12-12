@@ -21,25 +21,25 @@ jobs:
         fetch-depth: 0
       
     - name: Update app
-      run: steamcmd +force_install_dir D:/a/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/Resonite +login ${{ secrets.STEAMLOGIN }} +app_update 2519830 validate +quit
+      run: steamcmd +force_install_dir D:/a/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/Resonite +login ${{ secrets.STEAMLOGIN }} +app_update 2519830 validate +quit
 
     - name: Install ResoniteModLoader
       uses: suisei-cn/actions-download-file@v1
       with:
         url: https://github.com/resonite-modding-group/ResoniteModLoader/releases/latest/download/ResoniteModLoader.dll
-        target: D:/a/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/Resonite/Libraries/
+        target: D:/a/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/Resonite/Libraries/
         
     - name: Install Harmony
       uses: suisei-cn/actions-download-file@v1
       with:
         url: https://github.com/resonite-modding-group/ResoniteModLoader/releases/latest/download/0Harmony.dll
-        target: D:/a/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/Resonite/rml_libs/
+        target: D:/a/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/Resonite/rml_libs/
 
     - name: Cache app
       uses: actions/cache@v4
       with:
-        path: D:/a/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/Resonite/
-        key: app-runtime
+        path: D:/a/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/Resonite/
+        key: app-runtime-2
 
     - name: Restore the application
       run: msbuild /t:Restore /p:Configuration=RELEASE
@@ -72,6 +72,6 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: EsnyaResoniteModTemplate/bin/Release/net472/EsnyaResoniteModTemplate.dll
+        asset_path: EsnyaResoniteModTemplate.dll
         asset_name: EsnyaResoniteModTemplate.dll
         asset_content_type: application/octet-stream
