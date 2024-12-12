@@ -10,7 +10,7 @@ on:
 env:
   AppId: 2519830
   ProjectName: EsnyaResoniteModTemplate
-  ArtifactName: EsnyaResoniteModTemplate.dll
+  ArtifactDLL: EsnyaResoniteModTemplate.dll
   Configuration: Release
 
 jobs:
