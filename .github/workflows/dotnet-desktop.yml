@@ -33,6 +33,7 @@ jobs:
       uses: actions/cache@v4
       with:
         path: D:/a/EsnyaResoniteModTemplate/Resonite/
+        key: app
 
     - name: Checkout
       uses: actions/checkout@v4
