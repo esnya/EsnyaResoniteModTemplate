@@ -3,6 +3,7 @@ name: .NET Build
 on:
   push:
     branches: [ "master" ]
+  create:
     tags: [ 'v*' ]
 
 jobs:
@@ -14,12 +15,12 @@ jobs:
 
     - name: Setup SteamCMD
       uses: CyberAndrii/setup-steamcmd@v1.2.0
-      
+
     - name: Checkout
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-      
+
     - name: Update app
       run: steamcmd +force_install_dir D:/a/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/Resonite +login ${{ secrets.STEAMLOGIN }} +app_update 2519830 validate +quit
 
@@ -28,7 +29,7 @@ jobs:
       with:
         url: https://github.com/resonite-modding-group/ResoniteModLoader/releases/latest/download/ResoniteModLoader.dll
         target: D:/a/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/Resonite/Libraries/
-        
+
     - name: Install Harmony
       uses: suisei-cn/actions-download-file@v1
       with:
