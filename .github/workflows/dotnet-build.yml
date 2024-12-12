@@ -50,7 +50,7 @@ jobs:
       run: msbuild /p:Configuration=RELEASE
 
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: EsnyaResoniteModTemplate.dll
         path: EsnyaResoniteModTemplate/bin/Release/net472/EsnyaResoniteModTemplate.dll
@@ -73,4 +73,4 @@ jobs:
       with:
         files: |
           *.dll
-  
+        generate_release_notes: true
