@@ -21,6 +21,12 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Cache app
+      uses: actions/cache@v4
+      with:
+        path: D:/a/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/Resonite/
+        key: app-runtime-2
+        
     - name: Update app
       run: steamcmd +force_install_dir D:/a/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/Resonite +login ${{ secrets.STEAMLOGIN }} +app_update 2519830 validate +quit
 
@@ -35,12 +41,6 @@ jobs:
       with:
         url: https://github.com/resonite-modding-group/ResoniteModLoader/releases/latest/download/0Harmony.dll
         target: D:/a/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/Resonite/rml_libs/
-
-    - name: Cache app
-      uses: actions/cache@v4
-      with:
-        path: D:/a/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/Resonite/
-        key: app-runtime-2
 
     - name: Restore the application
       run: msbuild /t:Restore /p:Configuration=RELEASE
