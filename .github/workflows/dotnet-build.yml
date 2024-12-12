@@ -64,28 +64,13 @@ jobs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-    - name: Delete existing release
-      run: |
-        gh release delete ${{ github.ref }} -y
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      continue-on-error: true
-    - name: Create GitHub Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Download Artifacts
+      uses: actions/download-artifact@v4
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
-        body: |
-          [Compare changes](https://github.com/${{ github.repository }}/compare/${{ github.event.before }}...${{ github.sha }})
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
+        name: EsnyaResoniteModTemplate.dll
+    - name: Release
+      uses: softprops/action-gh-release@v2
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: EsnyaResoniteModTemplate/bin/Release/net472/EsnyaResoniteModTemplate.dll
-        asset_name: EsnyaResoniteModTemplate.dll
-        asset_content_type: application/octet-stream
+        files: |
+          *.dll
+  
