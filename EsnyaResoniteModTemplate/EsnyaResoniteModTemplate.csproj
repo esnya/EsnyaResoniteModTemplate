@@ -91,6 +91,6 @@
 		<Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(ResonitePath)rml_mods\HotReloadMods" ContinueOnError="true" />
 	</Target>
 	<ItemGroup>
-	  <EditorConfigFiles Remove="C:\Users\esnya\Documents\rml_mods\ResoniteMetricsCounter\ResoniteMetricsCounter\.editorconfig" />
+	  <EditorConfigFiles Remove="$(MSBuildThisFileDirectory)**\*.editorconfig" />
 	</ItemGroup>
 </Project>
