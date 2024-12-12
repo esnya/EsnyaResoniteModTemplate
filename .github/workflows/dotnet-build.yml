@@ -72,7 +72,7 @@ jobs:
         prerelease: false
         body: |
           [Compare changes](https://github.com/${{ github.repository }}/compare/${{ github.event.before }}...${{ github.sha }})
-
+      continue-on-error: true
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       with:
