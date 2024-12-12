@@ -12,7 +12,7 @@ jobs:
       uses: CyberAndrii/setup-steamcmd@v1.2.0
       
     - name: Update app
-      run: steamcmd +login anonymous +app_update 2519830 validate +quit
+      run: steamcmd +login ${{ secrets.STEAMLOGIN }} +app_update 2519830 validate +quit
       
     - name: Checkout
       uses: actions/checkout@v4
