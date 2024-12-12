@@ -60,6 +60,10 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
     - name: Delete existing release
       run: |
         gh release delete ${{ github.ref }} -y
