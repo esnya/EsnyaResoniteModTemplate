@@ -1,0 +1,40 @@
+name: .NET Build
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - name: Setup SteamCMD
+      uses: CyberAndrii/setup-steamcmd@v1.2.0
+      
+    - name: Update app
+      run: steamcmd +login anonymous +app_update 2519830 validate +quit
+      
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: Install .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 4.7.2
+        
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Restore the application
+      run: msbuild /t:Restore /p:Configuration=RELEASE
+
+    - name: Create the app package
+      run: msbuild /p:Configuration=RELEASE
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: RELEASE Library
+        path: ResoniteMetricsCounter/bin/Release/net472/EsnyaResoniteModTemplate.dll
