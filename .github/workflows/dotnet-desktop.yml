@@ -18,13 +18,13 @@ jobs:
       run: steamcmd +force_install_dir D:\a\EsnyaResoniteModTemplate\Resonite +login ${{ secrets.STEAMLOGIN }} +app_update 2519830 validate +quit
 
     - name: Install ResoniteModLoader
-      uses: suisei-cn/actions-download-file@1
+      uses: suisei-cn/actions-download-file@v1
       with:
         url: https://github.com/resonite-modding-group/ResoniteModLoader/releases/latest/download/ResoniteModLoader.dll
         target: D:/a/EsnyaResoniteModTemplate/Resonite/Libraries/
         
     - name: Install Harmony
-      uses: suisei-cn/actions-download-file@1
+      uses: suisei-cn/actions-download-file@v1
       with:
         url: https://github.com/resonite-modding-group/ResoniteModLoader/releases/latest/download/0Harmony.dll
         target: D:/a/EsnyaResoniteModTemplate/Resonite/rml_libs/
