@@ -15,15 +15,32 @@ jobs:
       uses: CyberAndrii/setup-steamcmd@v1.2.0
       
     - name: Update app
-      run: steamcmd +login ${{ secrets.STEAMLOGIN }} +app_update 2519830 validate +quit
-      
+      run: steamcmd +force_install_dir D:\a\EsnyaResoniteModTemplate\Resonite +login ${{ secrets.STEAMLOGIN }} +app_update 2519830 validate +quit
+
+    - name: Install ResoniteModLoader
+      uses: suisei-cn/actions-download-file@1
+      with:
+        url: https://github.com/resonite-modding-group/ResoniteModLoader/releases/latest/download/ResoniteModLoader.dll
+        target: D:/a/EsnyaResoniteModTemplate/Resonite/Libraries/
+        
+    - name: Install Harmony
+      uses: suisei-cn/actions-download-file@1
+      with:
+        url: https://github.com/resonite-modding-group/ResoniteModLoader/releases/latest/download/0Harmony.dll
+        target: D:/a/EsnyaResoniteModTemplate/Resonite/rml_libs/
+
+    - name: Cache app
+      uses: actions/cache@v4
+      with:
+        path: D:/a/EsnyaResoniteModTemplate/Resonite/
+
     - name: Checkout
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
     - name: Restore the application
-      run: msbuild /t:Restore /p:Configuration=RELEASE
+      run: msbuild /t:Restore /p:Configuration=RELEASE /p:ResonitePath=D:/a/EsnyaResoniteModTemplate/Resonite/
 
     - name: Create the app package
       run: msbuild /p:Configuration=RELEASE
