@@ -2,9 +2,10 @@ name: .NET Build
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   create:
-    tags: [ 'v*' ]
+    tags:
+      - 'v*'
 
 jobs:
   build:
@@ -26,7 +27,7 @@ jobs:
       with:
         path: D:/a/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/Resonite/
         key: app-runtime-2
-        
+
     - name: Update app
       run: steamcmd +force_install_dir D:/a/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/Resonite +login ${{ secrets.STEAMLOGIN }} +app_update 2519830 validate +quit
 
@@ -60,7 +61,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Create GitHub Release
+      id: create_release
       uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ github.ref }}
         release_name: Release ${{ github.ref }}
@@ -68,12 +72,11 @@ jobs:
         prerelease: false
         body: |
           [Compare changes](https://github.com/${{ github.repository }}/compare/${{ github.event.before }}...${{ github.sha }})
-      continue-on-error: true
 
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: EsnyaResoniteModTemplate.dll
+        asset_path: EsnyaResoniteModTemplate/bin/Release/net472/EsnyaResoniteModTemplate.dll
         asset_name: EsnyaResoniteModTemplate.dll
         asset_content_type: application/octet-stream
