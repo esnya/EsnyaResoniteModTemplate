@@ -7,6 +7,11 @@ on:
     tags:
       - 'v*'
 
+env:
+  AppId: 2519830
+  ProjectName: ResoniteMetricsCounter
+  ArtifactName: ResoniteMetricsCounter.dll
+
 jobs:
   build:
     runs-on: windows-latest
@@ -25,23 +30,23 @@ jobs:
     - name: Cache app
       uses: actions/cache@v4
       with:
-        path: D:/a/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/Resonite/
+        path: ${{ env.ProjectName }}/Resonite/
         key: app-runtime-2
 
     - name: Update app
-      run: steamcmd +force_install_dir D:/a/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/Resonite +login ${{ secrets.STEAMLOGIN }} +app_update 2519830 validate +quit
+      run: steamcmd +force_install_dir ${{ env.ProjectName }}/Resonite +login ${{ secrets.STEAMLOGIN }} +app_update 2519830 validate +quit
 
     - name: Install ResoniteModLoader
       uses: suisei-cn/actions-download-file@v1
       with:
         url: https://github.com/resonite-modding-group/ResoniteModLoader/releases/latest/download/ResoniteModLoader.dll
-        target: D:/a/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/Resonite/Libraries/
+        target: ${{ env.ProjectName }}/Resonite/Libraries/
 
     - name: Install Harmony
       uses: suisei-cn/actions-download-file@v1
       with:
         url: https://github.com/resonite-modding-group/ResoniteModLoader/releases/latest/download/0Harmony.dll
-        target: D:/a/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/EsnyaResoniteModTemplate/Resonite/rml_libs/
+        target: ${{ env.ProjectName }}/Resonite/rml_libs/
 
     - name: Restore the application
       run: msbuild /t:Restore /p:Configuration=RELEASE
@@ -52,8 +57,8 @@ jobs:
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: EsnyaResoniteModTemplate.dll
-        path: EsnyaResoniteModTemplate/bin/Release/net472/EsnyaResoniteModTemplate.dll
+        name: ${{ env.ArtifactName }}
+        path: ${{ env.ProjectName }}/bin/Release/net472/${{ env.ArtifactName }}
 
   release:
     if: startsWith(github.ref, 'refs/tags/v')
@@ -67,10 +72,9 @@ jobs:
     - name: Download Artifacts
       uses: actions/download-artifact@v4
       with:
-        name: EsnyaResoniteModTemplate.dll
+        name: ${{ env.ArtifactName }}.dll
     - name: Release
       uses: softprops/action-gh-release@v2
       with:
-        files: |
-          *.dll
+        files: ${{ env.ArtifactName }}
         generate_release_notes: true
