@@ -36,7 +36,7 @@ jobs:
       - name: Check if tag exists
         id: check_tag
         run: |
-          echo "TagExists::$(git tag -l "v${{ steps.get_version.outputs.Version }}")" >> $GITHUB_OUTPUT
+          echo "TagExists=$(git tag -l "v${{ steps.get_version.outputs.Version }}")" >> $GITHUB_OUTPUT
 
       - name: Create tag
         if: steps.check_tag.outputs.TagExists == ''
