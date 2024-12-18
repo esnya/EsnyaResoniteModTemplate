@@ -59,7 +59,7 @@ jobs:
         fetch-depth: 0
         
     - name: Build RML mod
-      uses: esnya/build-rml-mod@d72f4fb036877fefe9a89ab6c806a185d81fa1de
+      uses: esnya/build-rml-mod@v1
       with:
         project: ${{ github.workspace }}/${{ env.ProjectName }}
         steam-login: ${{ secrets.STEAMLOGIN }}
