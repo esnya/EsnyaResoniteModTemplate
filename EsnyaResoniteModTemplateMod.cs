@@ -2,9 +2,7 @@ using System.Linq;
 using System.Reflection;
 
 using Elements.Core;
-
 using HarmonyLib;
-
 using ResoniteModLoader;
 
 
@@ -15,9 +13,9 @@ using ResoniteHotReloadLib;
 
 namespace EsnyaResoniteModTemplate;
 
-public partial class EsnyaResoniteModTemplate : ResoniteMod
+public partial class EsnyaResoniteModTemplateMod : ResoniteMod
 {
-    private static Assembly ModAssembly => typeof(EsnyaResoniteModTemplate).Assembly;
+    private static Assembly ModAssembly => typeof(EsnyaResoniteModTemplateMod).Assembly;
 
     public override string Name => ModAssembly.GetCustomAttribute<AssemblyTitleAttribute>().Title;
     public override string Author => ModAssembly.GetCustomAttribute<AssemblyCompanyAttribute>().Company;
@@ -41,21 +39,14 @@ public partial class EsnyaResoniteModTemplate : ResoniteMod
 
     private static void Init(ResoniteMod modInstance)
     {
-        harmony.PatchCategory(HarmonyId);
+        harmony.PatchAll();
         config = modInstance?.GetConfiguration();
     }
 
 #if DEBUG
     public static void BeforeHotReload()
     {
-        try
-        {
-            harmony.UnpatchCategory(HarmonyId);
-        }
-        catch (System.Exception e)
-        {
-            Error(e);
-        }
+        harmony.UnpatchAll(HarmonyId);
     }
 
     public static void OnHotReload(ResoniteMod modInstance)
