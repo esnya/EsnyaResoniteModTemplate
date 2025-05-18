@@ -22,7 +22,7 @@ public partial class EsnyaResoniteModTemplateMod : ResoniteMod
     public override string Version => ModAssembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
     public override string Link => ModAssembly.GetCustomAttributes<AssemblyMetadataAttribute>().First(meta => meta.Key == "RepositoryUrl").Value;
 
-    internal static string HarmonyId => $"com.nekometer.esnya.{ModAssembly.GetName()}";
+    internal static string HarmonyId => $"com.nekometer.esnya.{ModAssembly.GetName().Name}";
 
 
     private static ModConfiguration? config;
