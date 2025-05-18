@@ -31,8 +31,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<Product>$(AssemblyTitle)</Product>
-		<Copyright>Copylight (c) 2024 $(Authors)</Copyright>
+                <Product>$(AssemblyTitle)</Product>
+                <Copyright>Copyright (c) 2025 $(Authors)</Copyright>
 		<PackageProjectUrl>$(RepositoryUrl)</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<GenerateDocumentationFile>False</GenerateDocumentationFile>
