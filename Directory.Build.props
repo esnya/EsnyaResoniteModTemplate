@@ -17,7 +17,7 @@
   <!-- Common Build Properties -->
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
-    <LangVersion>10.0</LangVersion>
+    <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <Deterministic>true</Deterministic>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
