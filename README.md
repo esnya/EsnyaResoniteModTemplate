@@ -27,7 +27,7 @@ A [ResoniteModLoader](https://github.com/resonite-modding-group/ResoniteModLoade
 
 ### Install to `rml_mods` Directory (and `rml_mods/HotReloadMods`)
 
-The project includes custom a target **Install** for development convenience:
+The project includes a custom target **Install** for development convenience:
 
 ```bash
 dotnet build -t:Install
