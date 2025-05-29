@@ -33,6 +33,14 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Setup .NET 9.0
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+
     - name: Setup RML environment
       uses: esnya/setup-rml-env@v2
       with:
@@ -41,8 +49,8 @@ jobs:
     - name: Build RML mod
       shell: pwsh
       run: |
-        msbuild /t:Restore /p:Configuration=Release
-        msbuild ${{ env.project_path }} /p:Configuration=Release /p:OutputPath=${{ github.workspace }}/${{ env.project_path }}/bin/Release/net472
+        dotnet restore
+        dotnet build ${{ env.project_path }} --configuration Release --output ${{ github.workspace }}/${{ env.project_path }}/bin/Release/net472
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
@@ -52,7 +60,6 @@ jobs:
 
   prepare-release:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
-    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -85,7 +92,7 @@ jobs:
 
   release:
     if: needs.prepare-release.outputs.should_release == 'true'
-    needs: prepare-release
+    needs: [build, prepare-release]
     runs-on: ubuntu-latest
     permissions:
       contents: write
