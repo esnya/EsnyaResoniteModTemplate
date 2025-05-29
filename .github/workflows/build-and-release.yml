@@ -59,7 +59,7 @@ jobs:
         path: ${{ env.project_path }}/bin/Release/net472/${{ env.artifact }}
 
   prepare-release:
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/ci' || startsWith(github.ref, 'refs/heads/ci/'))
     runs-on: ubuntu-latest
     permissions:
       contents: read
