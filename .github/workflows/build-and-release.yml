@@ -33,13 +33,16 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Build RML mod
-      uses: esnya/build-rml-mod@v1
+    - name: Setup RML environment
+      uses: esnya/setup-rml-env@v2
       with:
-        project: ${{ github.workspace }}
-        target-dir: ${{ github.workspace }}/${{ env.project_path }}/bin/Release/net472
-        cache-key: ${{ runner.os }}-resonite-${{ hashFiles('**/*.csproj') }}
         steam-login: ${{ secrets.STEAMLOGIN }}
+
+    - name: Build RML mod
+      shell: pwsh
+      run: |
+        msbuild /t:Restore /p:Configuration=Release
+        msbuild ${{ env.project_path }} /p:Configuration=Release /p:OutputPath=${{ github.workspace }}/${{ env.project_path }}/bin/Release/net472
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
