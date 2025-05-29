@@ -19,13 +19,13 @@
 	<PropertyGroup>
 		<RootNamespace>EsnyaResoniteModTemplate</RootNamespace>
 		<AssemblyName>EsnyaResoniteModTemplate</AssemblyName>
-		<AssemblyTitle>EsnyaResoniteModTemplate</AssemblyTitle>
-		<Title>EsnyaResoniteModTemplate</Title>
-		<Description></Description>
+		<AssemblyTitle>Esnya's Resonite Mod Template</AssemblyTitle>
+		<Title>Esnya's Resonite Mod Template</Title>
+		<Description>A comprehensive template for creating Resonite mods with ResoniteModLoader</Description>
 		<Authors>esnya</Authors>
 		<RepositoryUrl>https://github.com/esnya/EsnyaResoniteModTemplate</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>Resonite,Mod,ResoniteModLoader</PackageTags>
+		<PackageTags>Resonite,Mod,ResoniteModLoader,Template</PackageTags>
 		<Version>0.0.0.0</Version>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>

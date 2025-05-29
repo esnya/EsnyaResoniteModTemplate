@@ -1,14 +1,25 @@
-name: .NET Build
+name: Build and Release Resonite Mod
 
 on:
   push:
     branches:
     - master
-    - feature/ci
+    - main
+    - ci
+    - ci/*
   pull_request:
+    branches:
+    - master
+    - main
+    - ci
+    - ci/*
 
 env:
   artifact: EsnyaResoniteModTemplate.dll
+  project_path: EsnyaResoniteModTemplate
+
+permissions:
+  contents: write
 
 jobs:
   vtag:
@@ -20,7 +31,7 @@ jobs:
       - name: Find csproj file
         id: find_csproj
         run: |
-          echo "ProjectFile=$(find . -name "*.csproj" | head -n 1)" >> $GITHUB_OUTPUT
+          echo "ProjectFile=$(find ${{ env.project_path }} -name "*.csproj" | head -n 1)" >> $GITHUB_OUTPUT
 
       - name: Get version from csproj
         id: get_version
@@ -59,13 +70,15 @@ jobs:
       uses: esnya/build-rml-mod@v1
       with:
         project: ${{ github.workspace }}
+        target-dir: ${{ github.workspace }}/${{ env.project_path }}/bin/Release/net472
+        cache-key: ${{ runner.os }}-resonite-${{ hashFiles('**/*.csproj') }}
         steam-login: ${{ secrets.STEAMLOGIN }}
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.artifact }}
-        path: bin/Release/${{ env.artifact }}
+        path: ${{ env.project_path }}/bin/Release/net472/${{ env.artifact }}
 
   release:
     if: startsWith(github.ref, 'refs/tags/v') || needs.vtag.outputs.tagged
