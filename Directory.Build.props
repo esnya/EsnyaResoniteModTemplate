@@ -40,8 +40,6 @@
     <WarningsAsErrors />
     <WarningsNotAsErrors>NU1701</WarningsNotAsErrors> <!-- Allow .NET Framework dependencies -->
 
-    <!-- Resonite Mod Specific -->
-    <CopyToMods Condition="'$(CopyToMods)'==''">true</CopyToMods>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
@@ -53,6 +51,14 @@
     <ResonitePath Condition="Exists('$(HOME)/.steam/steam/steamapps/common/Resonite/')">$(HOME)/.steam/steam/steamapps/common/Resonite/</ResonitePath>
   </PropertyGroup>
 
+  <!-- Derived Resonite Paths -->
+  <PropertyGroup>
+    <ResoniteManagedPath>$(ResonitePath)Resonite_Data\Managed\</ResoniteManagedPath>
+    <ResoniteModsPath>$(ResonitePath)rml_mods</ResoniteModsPath>
+    <ResoniteHotReloadPath>$(ResonitePath)rml_mods\HotReloadMods</ResoniteHotReloadPath>
+    <ResoniteLibsPath>$(ResonitePath)rml_libs\</ResoniteLibsPath>
+  </PropertyGroup>
+
   <!-- Common Resonite References -->
   <ItemGroup>
     <!-- Core Resonite Mod Dependencies -->
@@ -61,28 +67,28 @@
       <Private>false</Private>
     </Reference>
     <Reference Include="HarmonyLib">
-      <HintPath>$(ResonitePath)rml_libs\0Harmony.dll</HintPath>
+      <HintPath>$(ResoniteLibsPath)0Harmony.dll</HintPath>
       <HintPath Condition="Exists('$(ResonitePath)0Harmony.dll')">$(ResonitePath)0Harmony.dll</HintPath>
       <Private>false</Private>
     </Reference>
 
-    <!-- Core Resonite Engine References -->
+    <!-- Core Resonite Engine References (Managed) -->
     <Reference Include="FrooxEngine">
-      <HintPath>$(ResonitePath)Resonite_Data\Managed\FrooxEngine.dll</HintPath>
+      <HintPath>$(ResoniteManagedPath)FrooxEngine.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Elements.Core">
-      <HintPath>$(ResonitePath)Resonite_Data\Managed\Elements.Core.dll</HintPath>
+      <HintPath>$(ResoniteManagedPath)Elements.Core.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Elements.Assets">
-      <HintPath>$(ResonitePath)Resonite_Data\Managed\Elements.Assets.dll</HintPath>
+      <HintPath>$(ResoniteManagedPath)Elements.Assets.dll</HintPath>
       <Private>false</Private>
     </Reference>
 
     <!-- Debug-only references -->
     <Reference Include="ResoniteHotReloadLib" Condition="'$(Configuration)'=='Debug'">
-      <HintPath>$(ResonitePath)rml_libs\ResoniteHotReloadLib.dll</HintPath>
+      <HintPath>$(ResoniteLibsPath)ResoniteHotReloadLib.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>
