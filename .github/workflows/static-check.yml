@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
-      - name: Install csharpier
-        run: dotnet tool install --tool-path "$HOME/.dotnet/tools" csharpier
+      - name: Restore tools
+        run: dotnet tool restore
       - name: Run csharpier check
-        run: $HOME/.dotnet/tools/csharpier check .
+        run: dotnet dotnet-csharpier --check .

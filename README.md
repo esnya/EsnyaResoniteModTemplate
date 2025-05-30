@@ -20,10 +20,11 @@ A [ResoniteModLoader](https://github.com/resonite-modding-group/ResoniteModLoade
 ### Installation for Development
 
 1. Clone this repository
-2. Set up your Resonite installation path:
+2. Run `dotnet tool restore` to install local tools (e.g., csharpier).
+3. Set up your Resonite installation path:
    - The project will automatically detect common Steam installation paths
    - Alternatively, set the `ResonitePath` property when building: `dotnet build -p:ResonitePath="Path\To\Your\Resonite"`
-3. Build the project: `dotnet build`
+4. Build the project: `dotnet build`
 
 ### Install to `rml_mods` Directory (and `rml_mods/HotReloadMods`)
 
