@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
+apt update && apt install -y --no-install-recommends dotnet-sdk-8.0
+
 # Install csharpier for formatting checks
 export PATH="$PATH:$HOME/.dotnet/tools"
 
