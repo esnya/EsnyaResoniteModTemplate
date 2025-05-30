@@ -36,7 +36,7 @@ public class EsnyaResoniteModTemplateMod : ResoniteMod
 
     private static string HarmonyId => $"com.nekometer.esnya.{Assembly.GetName().Name}";
 
-    private static ModConfiguration? configuration;
+    // private static ModConfiguration? configuration; TODO: Uncomment if you need configuration support
     private static readonly Harmony harmony = new(HarmonyId);
 
     /// <inheritdoc />
@@ -53,10 +53,12 @@ public class EsnyaResoniteModTemplateMod : ResoniteMod
     /// Initializes the mod by applying Harmony patches and loading configuration.
     /// </summary>
     /// <param name="mod">The mod instance to initialize.</param>
+#pragma warning disable IDE0060 // Remove unused parameter
     private static void Init(ResoniteMod? mod)
+#pragma warning restore IDE0060 // Remove unused parameter
     {
         harmony.PatchAll();
-        configuration = mod?.GetConfiguration();
+        // TODO: Use mod?.GetConfiguration() as needed
     }
 
 #if DEBUG
