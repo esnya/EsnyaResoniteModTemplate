@@ -1,11 +1,7 @@
 using System.Linq;
 using System.Reflection;
-
-using Elements.Core;
 using HarmonyLib;
 using ResoniteModLoader;
-
-
 
 #if DEBUG
 using ResoniteHotReloadLib;
@@ -15,7 +11,7 @@ namespace EsnyaResoniteModTemplate;
 
 public partial class EsnyaResoniteModTemplateMod : ResoniteMod
 {
-    private static Assembly ModAssembly => typeof(EsnyaResoniteModTemplateMod).Assembly;
+    private static readonly Assembly ModAssembly = typeof(EsnyaResoniteModTemplateMod).Assembly;
 
     public override string Name => ModAssembly.GetCustomAttribute<AssemblyTitleAttribute>().Title;
     public override string Author => ModAssembly.GetCustomAttribute<AssemblyCompanyAttribute>().Company;
@@ -25,7 +21,7 @@ public partial class EsnyaResoniteModTemplateMod : ResoniteMod
     internal static string HarmonyId => $"com.nekometer.esnya.{ModAssembly.GetName().Name}";
 
 
-    private static ModConfiguration? config;
+    private static ModConfiguration? configuration;
     private static readonly Harmony harmony = new(HarmonyId);
 
     public override void OnEngineInit()
@@ -37,10 +33,10 @@ public partial class EsnyaResoniteModTemplateMod : ResoniteMod
 #endif
     }
 
-    private static void Init(ResoniteMod modInstance)
+    private static void Init(ResoniteMod mod)
     {
         harmony.PatchAll();
-        config = modInstance?.GetConfiguration();
+        configuration = mod?.GetConfiguration();
     }
 
 #if DEBUG
@@ -49,9 +45,9 @@ public partial class EsnyaResoniteModTemplateMod : ResoniteMod
         harmony.UnpatchAll(HarmonyId);
     }
 
-    public static void OnHotReload(ResoniteMod modInstance)
+    public static void OnHotReload(ResoniteMod mod)
     {
-        Init(modInstance);
+        Init(mod);
     }
 #endif
 }
