@@ -26,4 +26,4 @@ jobs:
       - name: Install csharpier
         run: dotnet tool install --tool-path "$HOME/.dotnet/tools" csharpier
       - name: Run csharpier check
-        run: $HOME/.dotnet/tools/csharpier --check .
+        run: $HOME/.dotnet/tools/csharpier check .
