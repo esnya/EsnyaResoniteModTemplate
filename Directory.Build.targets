@@ -19,8 +19,7 @@
     <Message Text="Installing $(TargetFileName) to Resonite mods folder: $(ResoniteModsPath)" Importance="high" />
     <MakeDir Directories="$(ResoniteModsPath)" Condition="!Exists('$(ResoniteModsPath)')" />
     <Copy SourceFiles="$(TargetPath)"
-          DestinationFolder="$(ResoniteModsPath)"
-          SkipUnchangedFiles="true" />
+          DestinationFolder="$(ResoniteModsPath)" />
 
     <!-- Additionally install to HotReload folder for Debug builds -->
     <Message Text="Installing $(TargetFileName) to Resonite hot reload folder: $(ResoniteHotReloadPath)"
@@ -30,7 +29,6 @@
              Condition="'$(Configuration)'=='Debug' AND !Exists('$(ResoniteHotReloadPath)')" />
     <Copy SourceFiles="$(TargetPath)"
           DestinationFolder="$(ResoniteHotReloadPath)"
-          SkipUnchangedFiles="true"
           Condition="'$(Configuration)'=='Debug'" />
   </Target>
 </Project>
