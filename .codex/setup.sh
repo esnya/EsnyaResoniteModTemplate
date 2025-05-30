@@ -10,3 +10,6 @@ export PATH="$PATH:$HOME/.dotnet/tools"
 
 # Restore local tools (including csharpier)
 dotnet tool restore || true
+
+# Restore the project dependencies
+dotnet restore || true
