@@ -24,8 +24,21 @@ public class EsnyaResoniteModTemplateMod : ResoniteMod
         Assembly.GetCustomAttribute<AssemblyCompanyAttribute>().Company;
 
     /// <inheritdoc />
-    public override string Version =>
-        Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+    public override string Version
+    {
+        get
+        {
+            var versionString = Assembly
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
+                .InformationalVersion
+                ?? string.Empty;
+
+            var plusIndex = versionString.IndexOf('+');
+            return plusIndex > -1
+                ? versionString.Substring(0, plusIndex)
+                : versionString;
+        }
+    }
 
     /// <inheritdoc />
     public override string Link =>
