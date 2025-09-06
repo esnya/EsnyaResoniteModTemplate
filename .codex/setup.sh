@@ -28,7 +28,9 @@ if [ ! -f "$resonite_dir/rml_libs/0Harmony.dll" ]; then
   curl -L -o "$resonite_dir/rml_libs/0Harmony.dll" \
     https://github.com/resonite-modding-group/ResoniteModLoader/releases/download/4.0.0/0Harmony.dll
 fi
-gamelibs_path="$HOME/.nuget/packages/resonite.gamelibs/2025.9.2.430/ref/net9.0"
+# Extract resonite.gamelibs version from Directory.Packages.props
+gamelibs_version="$(grep -oP '<PackageReference\s+Include="resonite\.gamelibs"\s+Version="\K[0-9\.]+' Directory.Packages.props | head -n1)"
+gamelibs_path="$HOME/.nuget/packages/resonite.gamelibs/${gamelibs_version}/ref/net9.0"
 if [ -d "$gamelibs_path" ]; then
   cp -n "$gamelibs_path"/*.dll "$resonite_dir/"
 fi
