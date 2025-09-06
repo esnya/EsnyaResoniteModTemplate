@@ -15,8 +15,8 @@
   </PropertyGroup>
   <!-- Common Build Properties -->
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
-    <LangVersion>latest</LangVersion>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>12.0</LangVersion>
     <Nullable>enable</Nullable>
     <Deterministic>true</Deterministic>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
@@ -65,41 +65,38 @@
   </PropertyGroup>
   <!-- Derived Resonite Paths -->
   <PropertyGroup>
-    <ResoniteManagedPath>$([System.IO.Path]::Combine('$(ResonitePath)', 'Resonite_Data', 'Managed'))</ResoniteManagedPath>
-    <ResoniteModsPath>$([System.IO.Path]::Combine('$(ResonitePath)', 'rml_mods'))</ResoniteModsPath>
-    <ResoniteHotReloadPath>$([System.IO.Path]::Combine('$(ResonitePath)', 'rml_mods', 'HotReloadMods'))</ResoniteHotReloadPath>
+    <ResoniteLibrariesPath>$([System.IO.Path]::Combine('$(ResonitePath)', 'Libraries'))</ResoniteLibrariesPath>
     <ResoniteLibsPath>$([System.IO.Path]::Combine('$(ResonitePath)', 'rml_libs'))</ResoniteLibsPath>
+    <ResoniteModsPath>$([System.IO.Path]::Combine('$(ResonitePath)', 'rml_mods'))</ResoniteModsPath>
+    <ResoniteHotReloadPath>$([System.IO.Path]::Combine('$(ResoniteModsPath)', 'HotReloadMods'))</ResoniteHotReloadPath>
+    <ResoniteFrooxEnginePath>$([System.IO.Path]::Combine('$(ResonitePath)', 'FrooxEngine.dll'))</ResoniteFrooxEnginePath>
   </PropertyGroup>
   <!-- Common Resonite References -->
   <ItemGroup>
     <!-- Core Resonite Mod Dependencies -->
     <Reference Include="ResoniteModLoader">
-      <HintPath>$([System.IO.Path]::Combine('$(ResonitePath)', 'Libraries', 'ResoniteModLoader.dll'))</HintPath>
+      <HintPath>$([System.IO.Path]::Combine('$(ResoniteLibrariesPath)', 'ResoniteModLoader.dll'))</HintPath>
       <Private>$(IsTestProject)</Private>
     </Reference>
     <Reference Include="HarmonyLib">
       <HintPath>$([System.IO.Path]::Combine('$(ResoniteLibsPath)', '0Harmony.dll'))</HintPath>
       <Private>$(IsTestProject)</Private>
     </Reference>
-    <!-- Core Resonite Engine References (Managed) -->
-    <Reference Include="FrooxEngine">
-      <HintPath>$([System.IO.Path]::Combine('$(ResoniteManagedPath)', 'FrooxEngine.dll'))</HintPath>
-      <Private>$(IsTestProject)</Private>
-    </Reference>
-    <Reference Include="Elements.Core">
-      <HintPath>$([System.IO.Path]::Combine('$(ResoniteManagedPath)', 'Elements.Core.dll'))</HintPath>
-      <Private>$(IsTestProject)</Private>
-    </Reference>
-    <Reference Include="Elements.Assets">
-      <HintPath>$([System.IO.Path]::Combine('$(ResoniteManagedPath)', 'Elements.Assets.dll'))</HintPath>
-      <Private>$(IsTestProject)</Private>
-    </Reference>
-    <!-- System Packages - Aligned with FrooxEngine -->
     <!-- Debug-only references -->
     <Reference Include="ResoniteHotReloadLib" Condition="'$(Configuration)'=='Debug'">
       <HintPath>$([System.IO.Path]::Combine('$(ResoniteLibsPath)', 'ResoniteHotReloadLib.dll'))</HintPath>
       <Private>$(IsTestProject)</Private>
     </Reference>
+  </ItemGroup>
+  <!-- Resonite Engine References -->
+  <ItemGroup Condition="Exists('$(ResoniteFrooxEnginePath)')">
+    <Reference Include="FrooxEngine">
+      <HintPath>$(ResoniteFrooxEnginePath)</HintPath>
+      <Private>$(IsTestProject)</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition="!Exists('$(ResoniteFrooxEnginePath)')">
+    <PackageReference Include="Resonite.GameLibs" />
   </ItemGroup>
   <!-- Common Items -->
   <ItemGroup>
