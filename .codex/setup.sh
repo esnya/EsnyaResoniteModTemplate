@@ -1,12 +1,15 @@
 #!/bin/bash
 set -euo pipefail
 
-# Ensure dotnet is available
-if ! command -v dotnet >/dev/null; then
-  apt update && apt install -y --no-install-recommends dotnet-sdk-9.0
-fi
+export DOTNET_ROOT="$HOME/.dotnet"
+export PATH="$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools"
 
-export PATH="$PATH:$HOME/.dotnet/tools"
+# Ensure dotnet 9 SDK is installed
+if ! command -v dotnet >/dev/null || ! dotnet --list-sdks 2>/dev/null | grep -q '^9\.'; then
+  curl -sSL https://dot.net/v1/dotnet-install.sh -o /tmp/dotnet-install.sh
+  bash /tmp/dotnet-install.sh --channel 9.0
+  rm /tmp/dotnet-install.sh
+fi
 
 # Restore local tools (including csharpier)
 dotnet tool restore || true
