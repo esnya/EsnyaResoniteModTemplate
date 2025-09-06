@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
@@ -17,26 +18,25 @@ public class EsnyaResoniteModTemplateMod : ResoniteMod
     private static readonly Assembly Assembly = typeof(EsnyaResoniteModTemplateMod).Assembly;
 
     /// <inheritdoc />
-    public override string Name => Assembly.GetCustomAttribute<AssemblyTitleAttribute>().Title;
+    public override string Name =>
+        Assembly.GetCustomAttribute<AssemblyTitleAttribute>()?.Title ?? string.Empty;
 
     /// <inheritdoc />
     public override string Author =>
-        Assembly.GetCustomAttribute<AssemblyCompanyAttribute>().Company;
+        Assembly.GetCustomAttribute<AssemblyCompanyAttribute>()?.Company ?? string.Empty;
 
     /// <inheritdoc />
     public override string Version
     {
         get
         {
-            var versionString = Assembly
-                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
-                .InformationalVersion
-                ?? string.Empty;
+            var versionString =
+                Assembly
+                    .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+                    ?.InformationalVersion ?? string.Empty;
 
-            var plusIndex = versionString.IndexOf('+');
-            return plusIndex > -1
-                ? versionString.Substring(0, plusIndex)
-                : versionString;
+            var plusIndex = versionString.IndexOf('+', StringComparison.Ordinal);
+            return plusIndex > -1 ? versionString[..plusIndex] : versionString;
         }
     }
 

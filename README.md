@@ -12,10 +12,8 @@ A [ResoniteModLoader](https://github.com/resonite-modding-group/ResoniteModLoade
 
 ### Requirements
 
-- .NET Framework 4.7.2 or later
-- Visual Studio 2022 or Visual Studio Code
-- [ResoniteHotReloadLib](https://github.com/Nytra/ResoniteHotReloadLib) for hot reloading during development (optional but recommended)
-- dotnet SDK (Recommended version: 9.0 or later)
+- .NET 9 SDK
+- [ResoniteHotReloadLib](https://github.com/Nytra/ResoniteHotReloadLib) for hot reloading during development (optional)
 
 ### Installation for Development
 
@@ -24,6 +22,7 @@ A [ResoniteModLoader](https://github.com/resonite-modding-group/ResoniteModLoade
 3. Set up your Resonite installation path:
    - The project will automatically detect common Steam installation paths
    - Alternatively, set the `ResonitePath` property when building: `dotnet build -p:ResonitePath="Path\To\Your\Resonite"`
+   - If no installation is found, the build uses the `Resonite.GameLibs` package and downloads `ResoniteModLoader.dll` and `0Harmony.dll` automatically
 4. Build the project: `dotnet build`
 
 ### Install to `rml_mods` Directory (and `rml_mods/HotReloadMods`)

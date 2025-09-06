@@ -23,45 +23,57 @@ permissions:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
-    - id: checkout
-      name: Checkout
+    - name: Checkout
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
-    - name: Setup .NET 9.0
+    - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '9.0.x'
+        cache: true
+        cache-dependency-path: |
+          Directory.Packages.props
+          **/*.csproj
 
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v2
+    - name: Restore tools
+      run: dotnet tool restore
 
-    - name: Setup RML environment
-      uses: esnya/setup-rml-env@v2
+    - name: Cache Resonite libraries
+      uses: actions/cache@v4
       with:
-        steam-login: ${{ secrets.STEAMLOGIN }}
+        path: Resonite
+        key: RML-4.0.0
 
-    - name: Build RML mod
-      shell: pwsh
+    - name: Prepare Resonite libraries
       run: |
-        dotnet restore
-        dotnet build --configuration Release --output ${{ env.project_path }}/bin/Release/net472/${{ env.artifact }} --no-restore
+        mkdir -p Resonite/Libraries Resonite/rml_libs
+        if [ ! -f Resonite/Libraries/ResoniteModLoader.dll ]; then
+          curl -L -o Resonite/Libraries/ResoniteModLoader.dll https://github.com/resonite-modding-group/ResoniteModLoader/releases/download/4.0.0/ResoniteModLoader.dll
+        fi
+        if [ ! -f Resonite/rml_libs/0Harmony.dll ]; then
+          curl -L -o Resonite/rml_libs/0Harmony.dll https://github.com/resonite-modding-group/ResoniteModLoader/releases/download/4.0.0/0Harmony.dll
+        fi
 
-    - name: Test RML mod
-      shell: pwsh
-      run: |
-        dotnet test --configuration Release
+    - name: Restore
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Test
+      run: dotnet test --configuration Release --no-build
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.artifact }}
-        path: ${{ env.project_path }}/bin/Release/net472/${{ env.artifact }}
+        path: ${{ env.project_path }}/bin/Release/net9.0/${{ env.artifact }}
 
   prepare-release:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/ci' || startsWith(github.ref, 'refs/heads/ci/'))
