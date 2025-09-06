@@ -40,8 +40,8 @@
       >C:\Program Files (x86)\Steam\steamapps\common\Resonite</ResonitePath
     >
     <ResonitePath
-      Condition="'$(OS)'!='Windows_NT' AND Exists('$(USERPROFILE)\.steam\\steam\\steamapps\\common\\Resonite\\')"
-      >$(USERPROFILE)\.steam\\steam\\steamapps\\common\\Resonite</ResonitePath
+      Condition="'$(OS)'!='Windows_NT' AND Exists('$(USERPROFILE)/.steam/steam/steamapps/common/Resonite/')"
+      >$(USERPROFILE)/.steam/steam/steamapps/common/Resonite</ResonitePath
     >
     <ResonitePath
       Condition="'$(OS)'!='Windows_NT' AND Exists('$(HOME)/.steam/steam/steamapps/common/Resonite/')"
