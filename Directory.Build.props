@@ -36,8 +36,8 @@
   <PropertyGroup Condition="'$(ResonitePath)'==''">
     <ResonitePath>$([System.IO.Path]::Combine('$(MSBuildThisFileDirectory)', 'Resonite'))</ResonitePath>
     <ResonitePath
-      Condition="'$(OS)'=='Windows_NT' AND Exists('C:\\Program Files (x86)\\Steam\\steamapps\\common\\Resonite\\')"
-      >C:\Program Files (x86)\Steam\steamapps\common\Resonite</ResonitePath
+      Condition="'$(OS)'=='Windows_NT' AND Exists('C:/Program Files (x86)/Steam/steamapps/common/Resonite/')"
+      >C:/Program Files (x86)/Steam/steamapps/common/Resonite</ResonitePath
     >
     <ResonitePath
       Condition="'$(OS)'!='Windows_NT' AND Exists('$(USERPROFILE)/.steam/steam/steamapps/common/Resonite/')"
