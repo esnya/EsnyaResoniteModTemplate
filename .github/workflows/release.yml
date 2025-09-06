@@ -31,6 +31,18 @@ jobs:
         run: sed -i "s#<Version>[^<]*</Version>#<Version>${{ inputs.version }}</Version>#" Directory.Build.props
       - run: dotnet csharpier format Directory.Build.props
       - run: dotnet csharpier check .
+      - uses: actions/cache@v4
+        with:
+          path: Resonite
+          key: RML-4.0.0
+      - run: |
+          mkdir -p Resonite/Libraries Resonite/rml_libs
+          if [ ! -f Resonite/Libraries/ResoniteModLoader.dll ]; then
+            curl -L -o Resonite/Libraries/ResoniteModLoader.dll https://github.com/resonite-modding-group/ResoniteModLoader/releases/download/4.0.0/ResoniteModLoader.dll
+          fi
+          if [ ! -f Resonite/rml_libs/0Harmony.dll ]; then
+            curl -L -o Resonite/rml_libs/0Harmony.dll https://github.com/resonite-modding-group/ResoniteModLoader/releases/download/4.0.0/0Harmony.dll
+          fi
       - run: dotnet restore
       - run: dotnet build --configuration Release --no-restore
       - run: dotnet test --configuration Release --no-build
