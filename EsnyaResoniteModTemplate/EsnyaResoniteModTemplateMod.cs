@@ -35,7 +35,7 @@ public class EsnyaResoniteModTemplateMod : ResoniteMod
                     .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
                     ?.InformationalVersion ?? string.Empty;
 
-            var plusIndex = versionString.IndexOf('+', StringComparison.Ordinal);
+            var plusIndex = versionString.IndexOf('+', StringComparison.InvariantCulture);
             return plusIndex > -1 ? versionString[..plusIndex] : versionString;
         }
     }
