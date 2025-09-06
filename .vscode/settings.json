@@ -1,0 +1,7 @@
+{
+  "dotnet.defaultSolution": "EsnyaResoniteModTemplate.sln",
+  "editor.formatOnSave": true,
+  "[csharp]": {
+    "editor.defaultFormatter": "csharpier.csharpier-vscode"
+  }
+}
