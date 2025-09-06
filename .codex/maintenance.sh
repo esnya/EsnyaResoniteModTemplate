@@ -34,7 +34,9 @@ if [ "$latest_version" != "$current_version" ]; then
   dotnet restore || true
 fi
 
-gamelibs_path="$HOME/.nuget/packages/resonite.gamelibs/${latest_version}/ref/net9.0"
+# Re-read the actual current version after possible update and restore
+current_version=$(grep -oPm1 '(?<=<PackageVersion Include="Resonite.GameLibs" Version=")[^"]+' Directory.Packages.props || true)
+gamelibs_path="$HOME/.nuget/packages/resonite.gamelibs/${current_version}/ref/net9.0"
 if [ -d "$gamelibs_path" ]; then
   cp -f "$gamelibs_path"/*.dll "$resonite_dir/"
 fi
