@@ -92,7 +92,7 @@ jobs:
       - name: Get version from Directory.Build.props
         id: get_version
         run: |
-          VERSION=$(grep -oPm1 '(?<=<Version>)[^<]+' Directory.Build.props)
+          VERSION=$(grep -oPm1 "(?<=<Version>)[^<]+" Directory.Build.props)
           echo "Version=$VERSION" >> $GITHUB_OUTPUT
       - name: Debug version info
         run: echo "Found version: ${{ steps.get_version.outputs.Version }}"
