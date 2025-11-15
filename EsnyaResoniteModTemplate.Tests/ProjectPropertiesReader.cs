@@ -10,6 +10,8 @@ namespace EsnyaResoniteModTemplate.Tests;
 /// </summary>
 internal static class ProjectPropertiesReader
 {
+    private static readonly Lazy<string> SolutionDirectory = new(ResolveSolutionDirectory);
+
     /// <summary>
     /// Reads a property value from Directory.Build.props file.
     /// </summary>
@@ -19,15 +21,10 @@ internal static class ProjectPropertiesReader
     {
         try
         {
-            // Get the solution directory by going up from the test project directory
-            var testDirectory = Path.GetDirectoryName(
-                typeof(ProjectPropertiesReader).Assembly.Location
+            var directoryBuildPropsPath = Path.Combine(
+                SolutionDirectory.Value,
+                "Directory.Build.props"
             );
-            var solutionDirectory =
-                Directory.GetParent(testDirectory!)?.Parent?.Parent?.FullName
-                ?? throw new InvalidOperationException("Could not determine solution directory");
-
-            var directoryBuildPropsPath = Path.Combine(solutionDirectory, "Directory.Build.props");
 
             if (!File.Exists(directoryBuildPropsPath))
             {
@@ -72,16 +69,41 @@ internal static class ProjectPropertiesReader
         );
 
     /// <summary>
-    /// Gets the expected version from Directory.Build.props.
+    /// Gets the expected version from Directory.Build.props or GitVersion configuration.
     /// </summary>
     public static string ExpectedVersion =>
-        GetPropertyFromDirectoryBuildProps("Version")
-        ?? throw new InvalidOperationException(
-            "Version property not found in Directory.Build.props"
-        );
+        GetPropertyFromDirectoryBuildProps("Version") ?? GetGitVersionMarker();
 
     /// <summary>
     /// Gets the expected assembly title (project name) from Directory.Build.props or defaults to project name.
     /// </summary>
     public static string ExpectedAssemblyTitle => "EsnyaResoniteModTemplate";
+
+    private static string ResolveSolutionDirectory()
+    {
+        var testDirectory = Path.GetDirectoryName(
+            typeof(ProjectPropertiesReader).Assembly.Location
+        );
+        return Directory.GetParent(testDirectory!)?.Parent?.Parent?.FullName
+            ?? throw new InvalidOperationException("Could not determine solution directory");
+    }
+
+    private static string GetGitVersionMarker()
+    {
+        var gitVersionPath = Path.Combine(SolutionDirectory.Value, "GitVersion.yml");
+        if (!File.Exists(gitVersionPath))
+        {
+            throw new InvalidOperationException("GitVersion.yml not found in solution root");
+        }
+
+        var firstLine = File.ReadLines(gitVersionPath)
+            .FirstOrDefault(line => !string.IsNullOrWhiteSpace(line));
+
+        if (string.IsNullOrWhiteSpace(firstLine))
+        {
+            throw new InvalidOperationException("GitVersion.yml is empty");
+        }
+
+        return firstLine.Trim();
+    }
 }

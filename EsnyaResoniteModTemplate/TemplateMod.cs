@@ -1,8 +1,7 @@
-using System.Linq;
 using System.Reflection;
 using HarmonyLib;
 using ResoniteModLoader;
-#if DEBUG
+#if USE_RESONITE_HOT_RELOAD_LIB
 using ResoniteHotReloadLib;
 #endif
 
@@ -41,22 +40,24 @@ public class TemplateMod : ResoniteMod
     /// <inheritdoc />
     public override void OnEngineInit()
     {
-        Harmony.PatchAll();
-#if DEBUG
-        HotReloader.RegisterForHotReload(this);
-#endif
+        InitializeMod(this);
     }
 
-#if DEBUG
+#if USE_RESONITE_HOT_RELOAD_LIB
     /// <summary>Removes Harmony patches before hot reload.</summary>
     public static void BeforeHotReload() => Harmony.UnpatchAll(HarmonyId);
 
     /// <summary>Reapplies Harmony patches after hot reload.</summary>
     /// <param name="mod">The reloaded mod.</param>
-    public static void OnHotReload(ResoniteMod mod)
+    public static void OnHotReload(ResoniteMod mod) => InitializeMod(mod);
+#endif
+
+    private static void InitializeMod(ResoniteMod mod)
     {
-        _ = mod;
+        ArgumentNullException.ThrowIfNull(mod);
+#if USE_RESONITE_HOT_RELOAD_LIB
+        HotReloader.RegisterForHotReload(mod);
+#endif
         Harmony.PatchAll();
     }
-#endif
 }

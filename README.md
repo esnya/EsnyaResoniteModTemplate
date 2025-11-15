@@ -13,26 +13,33 @@ A [ResoniteModLoader](https://github.com/resonite-modding-group/ResoniteModLoade
 ### Requirements
 
 - .NET 9 SDK
-- [ResoniteHotReloadLib](https://github.com/Nytra/ResoniteHotReloadLib) for hot reloading during development (optional)
+- A Resonite installation that exposes `FrooxEngine.dll` (the default Steam paths on Windows/WSL are discovered automatically, otherwise pass `-p:ResonitePath=/absolute/path/to/Resonite`)
+- [ResoniteHotReloadLib](https://github.com/Nytra/ResoniteHotReloadLib) if you plan to use hot reload
 
 ### Installation for Development
 
-1. Clone this repository
-2. Run `dotnet tool restore` to install local tools (e.g., csharpier).
-3. Set up your Resonite installation path:
-   - The project will automatically detect common Steam installation paths
-   - Alternatively, set the `ResonitePath` property when building: `dotnet build -p:ResonitePath="Path\To\Your\Resonite"`
-   - If no installation is found, the build uses the `Resonite.GameLibs` package and downloads `ResoniteModLoader.dll` and `0Harmony.dll` automatically
-4. Build the project: `dotnet build`
+1. Clone this repository.
+2. Ensure the Resonite installation path is reachable. If it lives somewhere unusual, add `-p:ResonitePath="/path/to/Resonite"` to your build/test commands.
+3. Build the project: `dotnet build`
+
+### Development Workflow
+
+- Before committing, run `dotnet format EsnyaResoniteModTemplate.sln --verify-no-changes --no-restore`.
+- Keep local builds/tests aligned with CI by running `dotnet build EsnyaResoniteModTemplate.sln -c Release -p:ResonitePath="..."` and `dotnet test EsnyaResoniteModTemplate.sln -c Release -p:ResonitePath="..."`.
+- Refer to `AGENTS.md` for the authoritative checklist shared with CI.
 
 ### Install to `rml_mods` Directory (and `rml_mods/HotReloadMods`)
 
-The project includes a custom target **Install** for development convenience:
+Set `CopyToMods=true` when building to mirror the compiled DLL into your Resonite install automatically:
 
 ```bash
-dotnet build -t:Install
+dotnet build -p:CopyToMods=true -p:ResonitePath="C:\Program Files (x86)\Steam\steamapps\common\Resonite"
 ```
 
 ### Hot Reload Development
 
-For hot reload development with DEBUG builds, ensure you have [ResoniteHotReloadLib](https://github.com/Nytra/ResoniteHotReloadLib) installed in your Resonite installation.
+Opt-in to hot reload support by dropping [ResoniteHotReloadLib](https://github.com/Nytra/ResoniteHotReloadLib) into `$(ResonitePath)/rml_libs` and passing `-p:EnableResoniteHotReloadLib=true` (include it alongside `CopyToMods=true` if you also want the HotReloadMods copy). Without that property the project omits both the reference and compiler symbol, so developers without the DLL can still build.
+
+### Versioning & Releases
+
+[GitVersion](https://gitversion.net/) supplies semantic versions for builds and packages. Push a `v*` tag (for example `v0.2.0`) and the CI workflow will build, test, and publish the release artifacts automatically.

@@ -1,32 +1,53 @@
 <Project>
-  <Target
-    Name="Install"
-    Inputs="$(TargetPath)"
-    Outputs="$(ResoniteModsPath)/$(TargetFileName);$(ResoniteHotReloadPath)/$(TargetFileName)"
-  >
+  <Target Name="EnsureResonitePath" BeforeTargets="ResolveReferences">
     <Error
-      Text="Build output not found at $(TargetPath). Please run 'dotnet build' first."
-      Condition="!Exists('$(TargetPath)')"
+      Condition="'$(ResonitePath)'==''"
+      Text="ResonitePath must be set (install Resonite next to the repo or pass -p:ResonitePath=/absolute/path/to/Resonite)."
+    />
+    <Error
+      Condition="!Exists('$(ResoniteFrooxEngineDll)')"
+      Text="Cannot find FrooxEngine.dll under $(ResolvedResonitePath)."
+    />
+  </Target>
+  <Target
+    Name="CopyModToResonite"
+    AfterTargets="Build"
+    Condition="'$(IsTestProject)'!='true' AND '$(CopyToMods)'=='true'"
+  >
+    <PropertyGroup>
+      <_BuiltAssembly>$(TargetPath)</_BuiltAssembly>
+      <_HotReloadEnabled>false</_HotReloadEnabled>
+      <_HotReloadEnabled Condition="'$(EnableResoniteHotReloadLib)'=='true'"
+        >true</_HotReloadEnabled
+      >
+    </PropertyGroup>
+    <Error Text="Build output not found at $(TargetPath)." Condition="!Exists('$(TargetPath)')" />
+    <Message Text="Copying $(TargetFileName) to $(ResoniteModsDir)" Importance="high" />
+    <MakeDir Directories="$(ResoniteModsDir)" Condition="!Exists('$(ResoniteModsDir)')" />
+    <Copy
+      SourceFiles="$(_BuiltAssembly)"
+      DestinationFiles="$(ResoniteModsDir)/$(TargetFileName)"
+      SkipUnchangedFiles="true"
+      Retries="2"
+      RetryDelayMilliseconds="250"
+      ContinueOnError="true"
     />
     <Message
-      Text="Installing $(TargetFileName) to Resonite mods folder: $(ResoniteModsPath)"
+      Text="Copying $(TargetFileName) to $(ResoniteHotReloadModsDir)"
       Importance="high"
-    />
-    <MakeDir Directories="$(ResoniteModsPath)" Condition="!Exists('$(ResoniteModsPath)')" />
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ResoniteModsPath)" />
-    <Message
-      Text="Installing $(TargetFileName) to Resonite hot reload folder: $(ResoniteHotReloadPath)"
-      Importance="high"
-      Condition="'$(Configuration)'=='Debug'"
+      Condition="$(_HotReloadEnabled)"
     />
     <MakeDir
-      Directories="$(ResoniteHotReloadPath)"
-      Condition="'$(Configuration)'=='Debug' AND !Exists('$(ResoniteHotReloadPath)')"
+      Directories="$(ResoniteHotReloadModsDir)"
+      Condition="$(_HotReloadEnabled) AND !Exists('$(ResoniteHotReloadModsDir)')"
     />
     <Copy
-      SourceFiles="$(TargetPath)"
-      DestinationFolder="$(ResoniteHotReloadPath)"
-      Condition="'$(Configuration)'=='Debug'"
+      Condition="$(_HotReloadEnabled)"
+      SourceFiles="$(_BuiltAssembly)"
+      DestinationFiles="$(ResoniteHotReloadModsDir)/$(TargetFileName)"
+      SkipUnchangedFiles="true"
+      Retries="1"
+      RetryDelayMilliseconds="100"
     />
   </Target>
 </Project>
