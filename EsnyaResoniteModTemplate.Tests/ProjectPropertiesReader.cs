@@ -1,6 +1,3 @@
-using System;
-using System.IO;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace EsnyaResoniteModTemplate.Tests;
@@ -99,11 +96,8 @@ internal static class ProjectPropertiesReader
         var firstLine = File.ReadLines(gitVersionPath)
             .FirstOrDefault(line => !string.IsNullOrWhiteSpace(line));
 
-        if (string.IsNullOrWhiteSpace(firstLine))
-        {
-            throw new InvalidOperationException("GitVersion.yml is empty");
-        }
-
-        return firstLine.Trim();
+        return string.IsNullOrWhiteSpace(firstLine)
+            ? throw new InvalidOperationException("GitVersion.yml is empty")
+            : firstLine.Trim();
     }
 }

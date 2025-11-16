@@ -1,4 +1,5 @@
 #pragma warning disable CS1591
+#pragma warning disable CA1515 // Types should be made internal - xUnit requires test classes to be public
 using Xunit;
 
 namespace EsnyaResoniteModTemplate.Tests;
