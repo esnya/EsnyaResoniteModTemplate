@@ -18,7 +18,7 @@ internal static class ProjectPropertiesReader
     {
         try
         {
-            var directoryBuildPropsPath = Path.Combine(
+            string directoryBuildPropsPath = Path.Combine(
                 SolutionDirectory.Value,
                 "Directory.Build.props"
             );
@@ -30,11 +30,11 @@ internal static class ProjectPropertiesReader
                 );
             }
 
-            var doc = XDocument.Load(directoryBuildPropsPath);
+            XDocument doc = XDocument.Load(directoryBuildPropsPath);
 
             // Find the property in any PropertyGroup
-            var propertyElement = doc.Descendants(propertyName).FirstOrDefault();
-            var value = propertyElement?.Value;
+            XElement? propertyElement = doc.Descendants(propertyName).FirstOrDefault();
+            string? value = propertyElement?.Value;
 
             return value;
         }
@@ -78,7 +78,7 @@ internal static class ProjectPropertiesReader
 
     private static string ResolveSolutionDirectory()
     {
-        var testDirectory = Path.GetDirectoryName(
+        string? testDirectory = Path.GetDirectoryName(
             typeof(ProjectPropertiesReader).Assembly.Location
         );
         return Directory.GetParent(testDirectory!)?.Parent?.Parent?.FullName
@@ -87,13 +87,13 @@ internal static class ProjectPropertiesReader
 
     private static string GetGitVersionMarker()
     {
-        var gitVersionPath = Path.Combine(SolutionDirectory.Value, "GitVersion.yml");
+        string gitVersionPath = Path.Combine(SolutionDirectory.Value, "GitVersion.yml");
         if (!File.Exists(gitVersionPath))
         {
             throw new InvalidOperationException("GitVersion.yml not found in solution root");
         }
 
-        var firstLine = File.ReadLines(gitVersionPath)
+        string? firstLine = File.ReadLines(gitVersionPath)
             .FirstOrDefault(line => !string.IsNullOrWhiteSpace(line));
 
         return string.IsNullOrWhiteSpace(firstLine)
