@@ -14,9 +14,11 @@
 
 Before calling any change “done,” run and fix the following in order (pass `-p:ResonitePath=...` if auto-detect fails):
 
-1. `dotnet format EsnyaResoniteModTemplate.sln --verify-no-changes --no-restore`
-2. `dotnet build EsnyaResoniteModTemplate.sln -c Release`
-3. `dotnet test EsnyaResoniteModTemplate.sln -c Release`
+1. `dotnet format whitespace --verify-no-changes --no-restore`
+2. `dotnet format style --verify-no-changes --no-restore --severity info`
+3. `dotnet format analyzers --verify-no-changes --no-restore --severity info`
+4. `dotnet build -c Release`
+5. `dotnet test -c Release`
 
 Document failures in the PR/task notes and rerun once resolved.
 

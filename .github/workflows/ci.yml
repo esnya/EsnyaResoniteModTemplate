@@ -90,7 +90,9 @@ jobs:
           ResonitePath: ${{ env.RESONITE_INSTALL_DIR }}
         shell: bash
         run: |
-          dotnet format --verify-no-changes --no-restore
+          dotnet format whitespace --verify-no-changes --no-restore
+          dotnet format style --verify-no-changes --no-restore --severity info
+          dotnet format analyzers --verify-no-changes --no-restore --severity info
 
       - name: Build
         env:

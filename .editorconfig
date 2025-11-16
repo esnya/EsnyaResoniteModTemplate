@@ -25,30 +25,22 @@ csharp_style_unused_value_expression_statement_preference = unused_local_variabl
 dotnet_diagnostic.IDE0046.severity = suggestion
 dotnet_diagnostic.IDE0066.severity = silent
 
-# Analyzer settings
-dotnet_analyzer_diagnostic.category-design.severity = warning
-dotnet_analyzer_diagnostic.category-globalization.severity = warning
-dotnet_analyzer_diagnostic.category-maintainability.severity = warning
-dotnet_analyzer_diagnostic.category-naming.severity = warning
-dotnet_analyzer_diagnostic.category-performance.severity = warning
-dotnet_analyzer_diagnostic.category-reliability.severity = warning
-dotnet_analyzer_diagnostic.category-security.severity = warning
-dotnet_analyzer_diagnostic.category-style.severity = warning
-dotnet_analyzer_diagnostic.category-usage.severity = warning
+# Analyzer settings: default to error; see overrides below
+dotnet_analyzer_diagnostic.category-design.severity = error
+dotnet_analyzer_diagnostic.category-globalization.severity = error
+dotnet_analyzer_diagnostic.category-maintainability.severity = error
+dotnet_analyzer_diagnostic.category-naming.severity = error
+dotnet_analyzer_diagnostic.category-performance.severity = error
+dotnet_analyzer_diagnostic.category-reliability.severity = error
+dotnet_analyzer_diagnostic.category-security.severity = error
+dotnet_analyzer_diagnostic.category-style.severity = error
+dotnet_analyzer_diagnostic.category-usage.severity = error
 
 # Project-specific rule overrides
 dotnet_diagnostic.CA1031.severity = none # Do not catch general exception types - MOD safety
 dotnet_diagnostic.IDE0058.severity = none # Expression value is never used - UIBuilder patterns
 dotnet_diagnostic.IDE0290.severity = none # Use primary constructor (C# 12) - compatibility
-dotnet_diagnostic.CS8509.severity = error # Non-exhaustive switch expression
-dotnet_diagnostic.CS8524.severity = error # Non-exhaustive switch expression (patterns)
-dotnet_diagnostic.CS8602.severity = error # Dereference of a possibly null reference
-dotnet_diagnostic.CS8604.severity = error # Possible null reference argument
-dotnet_diagnostic.CS8618.severity = error # Non-nullable field is uninitialized
 dotnet_diagnostic.CA1515.severity = none # Tests are intentionally internal; rule is noisy for this repo
-dotnet_diagnostic.CA1062.severity = error # Validate arguments of public methods
-dotnet_diagnostic.CA1305.severity = error # Specify IFormatProvider
-dotnet_diagnostic.CA1309.severity = error # Use ordinal string comparison
 
 [*.{xml,config,props,targets,resx}]
 indent_size = 2
