@@ -83,28 +83,28 @@ jobs:
           ResonitePath: ${{ env.RESONITE_INSTALL_DIR }}
         shell: bash
         run: |
-          dotnet restore EsnyaResoniteModTemplate.sln
+          dotnet restore
 
       - name: Verify formatting (dotnet format)
         env:
           ResonitePath: ${{ env.RESONITE_INSTALL_DIR }}
         shell: bash
         run: |
-          dotnet format EsnyaResoniteModTemplate.sln --verify-no-changes --no-restore
+          dotnet format --verify-no-changes --no-restore
 
       - name: Build
         env:
           ResonitePath: ${{ env.RESONITE_INSTALL_DIR }}
         shell: bash
         run: |
-          dotnet build EsnyaResoniteModTemplate.sln --configuration Release --no-restore
+          dotnet build --configuration Release --no-restore
 
       - name: Test
         env:
           ResonitePath: ${{ env.RESONITE_INSTALL_DIR }}
         shell: bash
         run: |
-          dotnet test EsnyaResoniteModTemplate.sln --configuration Release --no-build
+          dotnet test --configuration Release --no-build
 
       - name: Prepare release assets
         if: startsWith(github.ref, 'refs/tags/v')
