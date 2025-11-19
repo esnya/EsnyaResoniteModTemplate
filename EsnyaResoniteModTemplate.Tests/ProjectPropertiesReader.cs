@@ -72,9 +72,22 @@ internal static class ProjectPropertiesReader
         GetPropertyFromDirectoryBuildProps("Version") ?? GetGitVersionMarker();
 
     /// <summary>
-    /// Gets the expected assembly title (project name) from Directory.Build.props or defaults to project name.
+    /// Gets the expected assembly title (project name) by deriving it from the solution file name.
     /// </summary>
-    public static string ExpectedAssemblyTitle => "EsnyaResoniteModTemplate";
+    public static string ExpectedAssemblyTitle
+    {
+        get
+        {
+            // Derive project name from solution file
+            string solutionDir = SolutionDirectory.Value;
+            string? solutionFile = Directory
+                .GetFiles(solutionDir, "*.sln")
+                .FirstOrDefault();
+            return solutionFile == null
+                ? throw new InvalidOperationException("No solution file found in solution directory")
+                : Path.GetFileNameWithoutExtension(solutionFile);
+        }
+    }
 
     private static string ResolveSolutionDirectory()
     {

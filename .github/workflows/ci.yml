@@ -18,6 +18,9 @@ env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   RESONITE_INSTALL_DIR: ${{ github.workspace }}/.resonite
+  # Project configuration - update these when renaming the project
+  PROJECT_NAME: EsnyaResoniteModTemplate
+  ARTIFACT_NAME: release-artifacts
 
 jobs:
   build:
@@ -113,19 +116,20 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          artifacts_dir=release-artifacts
+          artifacts_dir="${{ env.ARTIFACT_NAME }}"
+          project_name="${{ env.PROJECT_NAME }}"
           mkdir -p "$artifacts_dir"
-          cp EsnyaResoniteModTemplate/bin/Release/net9.0/EsnyaResoniteModTemplate.dll "$artifacts_dir/EsnyaResoniteModTemplate.dll"
-          if [ -f EsnyaResoniteModTemplate/bin/Release/net9.0/EsnyaResoniteModTemplate.pdb ]; then
-            cp EsnyaResoniteModTemplate/bin/Release/net9.0/EsnyaResoniteModTemplate.pdb "$artifacts_dir/EsnyaResoniteModTemplate.pdb"
+          cp "$project_name/bin/Release/net9.0/$project_name.dll" "$artifacts_dir/$project_name.dll"
+          if [ -f "$project_name/bin/Release/net9.0/$project_name.pdb" ]; then
+            cp "$project_name/bin/Release/net9.0/$project_name.pdb" "$artifacts_dir/$project_name.pdb"
           fi
 
       - name: Upload release artifacts
         if: startsWith(github.ref, 'refs/tags/v')
         uses: actions/upload-artifact@v4
         with:
-          name: esnya-resonite-mod-template
-          path: release-artifacts
+          name: ${{ env.ARTIFACT_NAME }}
+          path: ${{ env.ARTIFACT_NAME }}
           if-no-files-found: error
 
   release:
@@ -138,15 +142,15 @@ jobs:
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
-          name: esnya-resonite-mod-template
-          path: release-artifacts
+          name: ${{ env.ARTIFACT_NAME }}
+          path: ${{ env.ARTIFACT_NAME }}
 
       - name: Publish GitHub release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
-          name: EsnyaResoniteModTemplate ${{ github.ref_name }}
+          name: ${{ env.PROJECT_NAME }} ${{ github.ref_name }}
           generate_release_notes: true
           files: |
-            release-artifacts/EsnyaResoniteModTemplate.dll
-            release-artifacts/EsnyaResoniteModTemplate.pdb
+            ${{ env.ARTIFACT_NAME }}/${{ env.PROJECT_NAME }}.dll
+            ${{ env.ARTIFACT_NAME }}/${{ env.PROJECT_NAME }}.pdb
