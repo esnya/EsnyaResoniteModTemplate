@@ -9,6 +9,7 @@
 5. **Persistence:** Whenever workflow/process guidance changes, update this AGENTS file (or a nested `AGENTS.md`) immediately; treat it as the authoritative policy.
 6. **Data model constraints:** Template examples must stick to existing FrooxEngine data-model constructs; do not introduce new sync types or delegates in boilerplate code.
 7. **Design notes ban:** Avoid ad-hoc design docs. Keep intent obvious in code, commits, and this file.
+8. Create New menu hygiene: when you add a Create New/DevCreateNewForm option, the matching `BeforeHotReload` destructor MUST call `ResoniteHotReloadLib.HotReloader.RemoveMenuOption(string path, string optionName)` to delete that menu entry before hot reload runs, using the same path/label you added.
 
 ## Task Completion Ritual
 
