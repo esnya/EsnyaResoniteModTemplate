@@ -10,7 +10,10 @@
     <PackageTags>Resonite,Mod,ResoniteModLoader</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(IsTestProject)'=='' AND $([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.Tests'))">
+  <PropertyGroup>
+    <IsTestProject Condition="'$(IsTestProject)'==''">false</IsTestProject>
+  </PropertyGroup>
+  <PropertyGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.Tests'))">
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
   <PropertyGroup>
@@ -70,22 +73,22 @@
     <ResoniteHotReloadModsDir>$([System.IO.Path]::Combine('$(ResoniteModsDir)', 'HotReloadMods'))</ResoniteHotReloadModsDir>
     <ResoniteFrooxEngineDll>$([System.IO.Path]::Combine('$(ResolvedResonitePath)', 'FrooxEngine.dll'))</ResoniteFrooxEngineDll>
   </PropertyGroup>
-  <ItemGroup Condition="'$(IsTestProject)'!='true'">
+  <ItemGroup>
     <Reference Include="ResoniteModLoader">
       <HintPath>$([System.IO.Path]::Combine('$(ResoniteLibrariesDir)', 'ResoniteModLoader.dll'))</HintPath>
-      <Private>false</Private>
+      <Private>$(IsTestProject)</Private>
     </Reference>
     <Reference Include="HarmonyLib">
       <HintPath>$([System.IO.Path]::Combine('$(ResoniteLibsDir)', '0Harmony.dll'))</HintPath>
-      <Private>false</Private>
+      <Private>$(IsTestProject)</Private>
     </Reference>
     <Reference Include="FrooxEngine">
       <HintPath>$(ResoniteFrooxEngineDll)</HintPath>
-      <Private>false</Private>
+      <Private>$(IsTestProject)</Private>
     </Reference>
     <Reference Include="ResoniteHotReloadLib" Condition="'$(EnableResoniteHotReloadLib)'=='true'">
       <HintPath>$([System.IO.Path]::Combine('$(ResoniteLibsDir)', 'ResoniteHotReloadLib.dll'))</HintPath>
-      <Private>false</Private>
+      <Private>$(IsTestProject)</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>

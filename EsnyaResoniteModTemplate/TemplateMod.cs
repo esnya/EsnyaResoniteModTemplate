@@ -10,8 +10,9 @@ namespace EsnyaResoniteModTemplate;
 /// <summary>Entry point for the mod.</summary>
 public class TemplateMod : ResoniteMod
 {
+    private const string ModNamespace = "com.nekometer.esnya";
     private static readonly Assembly Assembly = typeof(TemplateMod).Assembly;
-    private static readonly string HarmonyId = $"com.nekometer.esnya.{Assembly.GetName().Name}";
+    private static readonly string HarmonyId = $"{ModNamespace}.{Assembly.GetName().Name}";
     private static readonly Harmony Harmony = new(HarmonyId);
 
     /// <inheritdoc />
@@ -45,11 +46,17 @@ public class TemplateMod : ResoniteMod
 
 #if USE_RESONITE_HOT_RELOAD_LIB
     /// <summary>Removes Harmony patches before hot reload.</summary>
-    public static void BeforeHotReload() => Harmony.UnpatchAll(HarmonyId);
+    public static void BeforeHotReload()
+    {
+        Harmony.UnpatchAll(HarmonyId);
+    }
 
     /// <summary>Reapplies Harmony patches after hot reload.</summary>
     /// <param name="mod">The reloaded mod.</param>
-    public static void OnHotReload(ResoniteMod mod) => InitializeMod(mod);
+    public static void OnHotReload(ResoniteMod mod)
+    {
+        InitializeMod(mod);
+    }
 #endif
 
     private static void InitializeMod(ResoniteMod mod)

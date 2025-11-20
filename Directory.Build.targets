@@ -16,38 +16,38 @@
   >
     <PropertyGroup>
       <_BuiltAssembly>$(TargetPath)</_BuiltAssembly>
-      <_HotReloadEnabled>false</_HotReloadEnabled>
-      <_HotReloadEnabled Condition="'$(EnableResoniteHotReloadLib)'=='true'"
-        >true</_HotReloadEnabled
-      >
+      <_HotReloadEnabled>$(EnableResoniteHotReloadLib)</_HotReloadEnabled>
     </PropertyGroup>
     <Error Text="Build output not found at $(TargetPath)." Condition="!Exists('$(TargetPath)')" />
-    <Message Text="Copying $(TargetFileName) to $(ResoniteModsDir)" Importance="high" />
-    <MakeDir Directories="$(ResoniteModsDir)" Condition="!Exists('$(ResoniteModsDir)')" />
+    <ItemGroup>
+      <_CopyDestination Include="$(ResoniteModsDir)/$(TargetFileName)">
+        <SkipUnchangedFiles>true</SkipUnchangedFiles>
+        <Retries>2</Retries>
+        <RetryDelayMilliseconds>250</RetryDelayMilliseconds>
+        <ContinueOnError>true</ContinueOnError>
+        <Message>Copying $(TargetFileName) to $(ResoniteModsDir)</Message>
+      </_CopyDestination>
+      <_CopyDestination Include="$(ResoniteHotReloadModsDir)/$(TargetFileName)" Condition="$(_HotReloadEnabled)">
+        <SkipUnchangedFiles>true</SkipUnchangedFiles>
+        <Retries>1</Retries>
+        <RetryDelayMilliseconds>100</RetryDelayMilliseconds>
+        <ContinueOnError>false</ContinueOnError>
+        <Message>Copying $(TargetFileName) to $(ResoniteHotReloadModsDir)</Message>
+      </_CopyDestination>
+      <_CopyDir Include="$(ResoniteModsDir)" />
+      <_CopyDir Include="$(ResoniteHotReloadModsDir)" Condition="$(_HotReloadEnabled)" />
+    </ItemGroup>
+    <Message Text="@( _CopyDestination -> '%(Message)')"
+             Importance="high"
+             Condition="'@(_CopyDestination)'!=''" />
+    <MakeDir Directories="@(_CopyDir)" Condition="'@(_CopyDir)'!=''" />
     <Copy
       SourceFiles="$(_BuiltAssembly)"
-      DestinationFiles="$(ResoniteModsDir)/$(TargetFileName)"
-      SkipUnchangedFiles="true"
-      Retries="2"
-      RetryDelayMilliseconds="250"
-      ContinueOnError="true"
-    />
-    <Message
-      Text="Copying $(TargetFileName) to $(ResoniteHotReloadModsDir)"
-      Importance="high"
-      Condition="$(_HotReloadEnabled)"
-    />
-    <MakeDir
-      Directories="$(ResoniteHotReloadModsDir)"
-      Condition="$(_HotReloadEnabled) AND !Exists('$(ResoniteHotReloadModsDir)')"
-    />
-    <Copy
-      Condition="$(_HotReloadEnabled)"
-      SourceFiles="$(_BuiltAssembly)"
-      DestinationFiles="$(ResoniteHotReloadModsDir)/$(TargetFileName)"
-      SkipUnchangedFiles="true"
-      Retries="1"
-      RetryDelayMilliseconds="100"
+      DestinationFiles="@(_CopyDestination)"
+      SkipUnchangedFiles="%(_CopyDestination.SkipUnchangedFiles)"
+      Retries="%(_CopyDestination.Retries)"
+      RetryDelayMilliseconds="%(_CopyDestination.RetryDelayMilliseconds)"
+      ContinueOnError="%(_CopyDestination.ContinueOnError)"
     />
   </Target>
 </Project>
