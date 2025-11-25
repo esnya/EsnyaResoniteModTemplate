@@ -1,5 +1,4 @@
 using System.Reflection;
-using EsnyaResoniteModTemplate;
 using Xunit;
 
 namespace EsnyaResoniteModTemplate.Tests;
