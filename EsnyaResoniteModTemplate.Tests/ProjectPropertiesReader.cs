@@ -99,12 +99,9 @@ internal static class ProjectPropertiesReader
     {
         string path = Path.Combine(SolutionDirectory.Value, "Directory.Build.props");
 
-        if (!File.Exists(path))
-        {
-            throw new FileNotFoundException($"Directory.Build.props not found at: {path}");
-        }
-
-        return XDocument.Load(path);
+        return !File.Exists(path)
+            ? throw new FileNotFoundException($"Directory.Build.props not found at: {path}")
+            : XDocument.Load(path);
     }
 
     private static string GetGitVersionMarker()
