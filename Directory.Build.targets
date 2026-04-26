@@ -16,11 +16,11 @@
 
   <Target Name="CopyModToResonite" AfterTargets="Build" Condition="'$(CopyToMods)'=='true' and '$(IsTestProject)'!='true'">
     <MakeDir Directories="$(ResoniteModsDir)" />
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ResoniteModsDir)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ResoniteModsDir)" SkipUnchangedFiles="true" ContinueOnError="WarnAndContinue" />
   </Target>
 
   <Target Name="CopyModToHotReloadMods" AfterTargets="Build" Condition="'$(CopyToMods)'=='true' and '$(EnableHotReloadLibs)'=='true' and '$(IsTestProject)'!='true'">
     <MakeDir Directories="$(ResoniteHotReloadModsDir)" />
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ResoniteHotReloadModsDir)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ResoniteHotReloadModsDir)" SkipUnchangedFiles="true" ContinueOnError="WarnAndContinue" />
   </Target>
 </Project>
