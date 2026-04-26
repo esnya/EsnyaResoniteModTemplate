@@ -63,6 +63,9 @@ public sealed class TemplateMod : ResoniteMod
     /// </summary>
     public static void BeforeHotReload()
     {
+        config?.OnThisConfigurationChanged -= HandleConfigurationChanged;
+        config = null;
+
         SetPatchesApplied(shouldPatch: false);
     }
 
@@ -79,6 +82,8 @@ public sealed class TemplateMod : ResoniteMod
     private static void Initialize(ResoniteMod mod)
     {
         ArgumentNullException.ThrowIfNull(mod);
+
+        config?.OnThisConfigurationChanged -= HandleConfigurationChanged;
 
         config = mod.GetConfiguration();
         config?.OnThisConfigurationChanged += HandleConfigurationChanged;
