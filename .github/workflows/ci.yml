@@ -18,6 +18,7 @@ env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   RESONITE_INSTALL_DIR: ${{ github.workspace }}/.resonite
+  RESONITE_MOD_LOADER_VERSION: 5.0.1
   # Project configuration - update these when renaming the project
   PROJECT_NAME: EsnyaResoniteModTemplate
   ARTIFACT_NAME: release-artifacts
@@ -64,9 +65,9 @@ jobs:
           fi
           install -d "$RESONITE_PATH/Libraries" "$RESONITE_PATH/rml_libs"
           curl -sSfL -o "$RESONITE_PATH/Libraries/ResoniteModLoader.dll" \
-            https://github.com/resonite-modding-group/ResoniteModLoader/releases/latest/download/ResoniteModLoader.dll
+            "https://github.com/resonite-modding-group/ResoniteModLoader/releases/download/${RESONITE_MOD_LOADER_VERSION}/ResoniteModLoader.dll"
           curl -sSfL -o "$RESONITE_PATH/rml_libs/0Harmony.dll" \
-            https://github.com/resonite-modding-group/ResoniteModLoader/releases/latest/download/0Harmony.dll
+            "https://github.com/resonite-modding-group/ResoniteModLoader/releases/download/${RESONITE_MOD_LOADER_VERSION}/0Harmony.dll"
 
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
@@ -119,9 +120,9 @@ jobs:
           artifacts_dir="${{ env.ARTIFACT_NAME }}"
           project_name="${{ env.PROJECT_NAME }}"
           mkdir -p "$artifacts_dir"
-          cp "$project_name/bin/Release/net10.0/$project_name.dll" "$artifacts_dir/$project_name.dll"
-          if [ -f "$project_name/bin/Release/net10.0/$project_name.pdb" ]; then
-            cp "$project_name/bin/Release/net10.0/$project_name.pdb" "$artifacts_dir/$project_name.pdb"
+          cp "src/$project_name/bin/Release/net10.0/$project_name.dll" "$artifacts_dir/$project_name.dll"
+          if [ -f "src/$project_name/bin/Release/net10.0/$project_name.pdb" ]; then
+            cp "src/$project_name/bin/Release/net10.0/$project_name.pdb" "$artifacts_dir/$project_name.pdb"
           fi
 
       - name: Upload release artifacts

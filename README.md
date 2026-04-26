@@ -1,45 +1,56 @@
-# EsnyaResoniteModTemplate
+# Name Placeholder
 
 A [ResoniteModLoader](https://github.com/resonite-modding-group/ResoniteModLoader) mod for [Resonite](https://resonite.com/).
+
+Code identity: `EsnyaResoniteModTemplate`
 
 ## Installation
 
 1. Install the [ResoniteModLoader](https://github.com/resonite-modding-group/ResoniteModLoader).
-1. Place the [EsnyaResoniteModTemplate.dll](https://github.com/esnya/EsnyaResoniteModTemplate/releases/latest/download/EsnyaResoniteModTemplate.dll) into your `rml_mods` folder. This folder should be located at `C:\Program Files (x86)\Steam\steamapps\common\Resonite\rml_mods` for a standard installation. You can create it if it's missing, or if you start the game once with the ResoniteModLoader installed it will create this folder for you.
-1. Launch the game. If you want to check that the mod is working you can check your Resonite logs.
+2. Download `EsnyaResoniteModTemplate.dll` from GitHub Releases.
+3. Place `EsnyaResoniteModTemplate.dll` into your `rml_mods` directory.
+4. Launch Resonite.
+
+## Mod Settings
+
+- `Enabled`: enables the template Harmony patch lifecycle. Defaults to `true`.
 
 ## Development
 
 ### Requirements
 
-- .NET 10 SDK (install the latest preview until GA ships)
-- A Resonite installation that exposes `FrooxEngine.dll` (the default Steam paths on Windows/WSL are discovered automatically, otherwise pass `-p:ResonitePath=/absolute/path/to/Resonite`)
-- [ResoniteHotReloadLib](https://github.com/Nytra/ResoniteHotReloadLib) if you plan to use hot reload
+- .NET 10 SDK
+- A Resonite install, or fallback assemblies under `./Resonite`
+- Optional: [ResoniteHotReloadLib](https://github.com/Nytra/ResoniteHotReloadLib) if you want hot reload
 
-### Installation for Development
+### Build
 
-1. Clone this repository.
-2. Ensure the Resonite installation path is reachable. If it lives somewhere unusual, add `-p:ResonitePath="/path/to/Resonite"` to your build/test commands.
-3. Build the project: `dotnet build`
-
-### Development Workflow
-
-- Before committing, run `dotnet format EsnyaResoniteModTemplate.sln --verify-no-changes --no-restore`.
-- Keep local builds/tests aligned with CI by running `dotnet build EsnyaResoniteModTemplate.sln -c Release -p:ResonitePath="..."` and `dotnet test EsnyaResoniteModTemplate.sln -c Release -p:ResonitePath="..."`.
-- Refer to `AGENTS.md` for the authoritative checklist shared with CI.
-
-### Install to `rml_mods` Directory (and `rml_mods/HotReloadMods`)
-
-Set `CopyToMods=true` when building to mirror the compiled DLL into your Resonite install automatically:
-
-```bash
-dotnet build -p:CopyToMods=true -p:ResonitePath="C:\Program Files (x86)\Steam\steamapps\common\Resonite"
+```sh
+dotnet build .\EsnyaResoniteModTemplate.slnx -c Debug -p:ResonitePath="C:\Program Files (x86)\Steam\steamapps\common\Resonite"
 ```
 
-### Hot Reload Development
+### Test
 
-Opt-in to hot reload support by dropping [ResoniteHotReloadLib](https://github.com/Nytra/ResoniteHotReloadLib) into `$(ResonitePath)/rml_libs` and passing `-p:EnableResoniteHotReloadLib=true` (include it alongside `CopyToMods=true` if you also want the HotReloadMods copy). Without that property the project omits both the reference and compiler symbol, so developers without the DLL can still build.
+```sh
+dotnet test .\EsnyaResoniteModTemplate.slnx -c Debug -p:ResonitePath="C:\Program Files (x86)\Steam\steamapps\common\Resonite"
+```
 
-### Versioning & Releases
+### Copy to `rml_mods`
 
-[GitVersion](https://gitversion.net/) supplies semantic versions for builds and packages. Push a `v*` tag (for example `v0.2.0`) and the CI workflow will build, test, and publish the release artifacts automatically.
+```sh
+dotnet build .\EsnyaResoniteModTemplate.slnx -c Debug -p:CopyToMods=true -p:ResonitePath="C:\Program Files (x86)\Steam\steamapps\common\Resonite"
+```
+
+### Hot Reload
+
+Hot reload is opt-in. If `ResoniteHotReloadLib.dll` and `ResoniteHotReloadLibCore.dll` are present, enable it with:
+
+```sh
+dotnet build .\EsnyaResoniteModTemplate.slnx -c Debug -p:EnableHotReloadLibs=true -p:CopyToMods=true -p:ResonitePath="C:\Program Files (x86)\Steam\steamapps\common\Resonite"
+```
+
+## Versioning And Release
+
+- Release version is derived from Git tags through `MinVer`.
+- Push a tag in the form `vX.Y.Z` to create a GitHub Release for that version automatically.
+- Non-tag builds keep using CI checks, but their build version is a `MinVer`-calculated pre-release version instead of a fixed repository version.
