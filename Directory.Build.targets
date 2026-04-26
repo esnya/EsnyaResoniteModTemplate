@@ -1,53 +1,26 @@
 <Project>
-  <Target Name="EnsureResonitePath" BeforeTargets="ResolveReferences">
+  <Target Name="EnsureResoniteReferences" BeforeTargets="ResolveReferences">
     <Error
-      Condition="'$(ResonitePath)'==''"
-      Text="ResonitePath must be set (install Resonite next to the repo or pass -p:ResonitePath=/absolute/path/to/Resonite)."
-    />
+      Condition="'$(FrooxEnginePresent)'!='true' and !Exists('$(MSBuildThisFileDirectory)Resonite\ResoniteModLoader.dll')"
+      Text="Cannot resolve Resonite references. Install Resonite locally or place fallback assemblies under $(MSBuildThisFileDirectory)Resonite\." />
     <Error
-      Condition="!Exists('$(ResoniteFrooxEngineDll)')"
-      Text="Cannot find FrooxEngine.dll under $(ResolvedResonitePath)."
-    />
+      Condition="'$(FrooxEnginePresent)'!='true' and !Exists('$(MSBuildThisFileDirectory)Resonite\0Harmony.dll')"
+      Text="Cannot resolve 0Harmony.dll for fallback builds. Place it under $(MSBuildThisFileDirectory)Resonite\." />
+    <Error
+      Condition="'$(EnableHotReloadLibs)'=='true' and '$(FrooxEnginePresent)'!='true' and !Exists('$(MSBuildThisFileDirectory)Resonite\ResoniteHotReloadLib.dll')"
+      Text="EnableHotReloadLibs=true requires ResoniteHotReloadLib.dll under $(MSBuildThisFileDirectory)Resonite\ when no local Resonite install is used." />
+    <Error
+      Condition="'$(EnableHotReloadLibs)'=='true' and '$(FrooxEnginePresent)'!='true' and !Exists('$(MSBuildThisFileDirectory)Resonite\ResoniteHotReloadLibCore.dll')"
+      Text="EnableHotReloadLibs=true requires ResoniteHotReloadLibCore.dll under $(MSBuildThisFileDirectory)Resonite\ when no local Resonite install is used." />
   </Target>
-  <Target
-    Name="CopyModToResonite"
-    AfterTargets="Build"
-    Condition="'$(IsTestProject)'!='true' AND '$(CopyToMods)'=='true'"
-  >
-    <PropertyGroup>
-      <_BuiltAssembly>$(TargetPath)</_BuiltAssembly>
-      <_HotReloadEnabled>$(EnableResoniteHotReloadLib)</_HotReloadEnabled>
-    </PropertyGroup>
-    <Error Text="Build output not found at $(TargetPath)." Condition="!Exists('$(TargetPath)')" />
-    <ItemGroup>
-      <_CopyDestination Include="$(ResoniteModsDir)/$(TargetFileName)">
-        <SkipUnchangedFiles>true</SkipUnchangedFiles>
-        <Retries>2</Retries>
-        <RetryDelayMilliseconds>250</RetryDelayMilliseconds>
-        <ContinueOnError>true</ContinueOnError>
-        <Message>Copying $(TargetFileName) to $(ResoniteModsDir)</Message>
-      </_CopyDestination>
-      <_CopyDestination Include="$(ResoniteHotReloadModsDir)/$(TargetFileName)" Condition="$(_HotReloadEnabled)">
-        <SkipUnchangedFiles>true</SkipUnchangedFiles>
-        <Retries>1</Retries>
-        <RetryDelayMilliseconds>100</RetryDelayMilliseconds>
-        <ContinueOnError>false</ContinueOnError>
-        <Message>Copying $(TargetFileName) to $(ResoniteHotReloadModsDir)</Message>
-      </_CopyDestination>
-      <_CopyDir Include="$(ResoniteModsDir)" />
-      <_CopyDir Include="$(ResoniteHotReloadModsDir)" Condition="$(_HotReloadEnabled)" />
-    </ItemGroup>
-    <Message Text="@( _CopyDestination -> '%(Message)')"
-             Importance="high"
-             Condition="'@(_CopyDestination)'!=''" />
-    <MakeDir Directories="@(_CopyDir)" Condition="'@(_CopyDir)'!=''" />
-    <Copy
-      SourceFiles="$(_BuiltAssembly)"
-      DestinationFiles="@(_CopyDestination)"
-      SkipUnchangedFiles="%(_CopyDestination.SkipUnchangedFiles)"
-      Retries="%(_CopyDestination.Retries)"
-      RetryDelayMilliseconds="%(_CopyDestination.RetryDelayMilliseconds)"
-      ContinueOnError="%(_CopyDestination.ContinueOnError)"
-    />
+
+  <Target Name="CopyModToResonite" AfterTargets="Build" Condition="'$(CopyToMods)'=='true' and '$(IsTestProject)'!='true'">
+    <MakeDir Directories="$(ResoniteModsDir)" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ResoniteModsDir)" SkipUnchangedFiles="true" ContinueOnError="WarnAndContinue" />
+  </Target>
+
+  <Target Name="CopyModToHotReloadMods" AfterTargets="Build" Condition="'$(CopyToMods)'=='true' and '$(EnableHotReloadLibs)'=='true' and '$(IsTestProject)'!='true'">
+    <MakeDir Directories="$(ResoniteHotReloadModsDir)" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ResoniteHotReloadModsDir)" SkipUnchangedFiles="true" ContinueOnError="WarnAndContinue" />
   </Target>
 </Project>
